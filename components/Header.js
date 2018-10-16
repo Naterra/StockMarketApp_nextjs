@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 export default () => (<nav>
-    <div className="nav-wrapper">
+    <div className="nav-wrapper  teal lighten-2">
 
         <a href="/" className="brand-logo">Logo</a>
         <ul id="nav-mobile" className="right hide-on-med-and-down">

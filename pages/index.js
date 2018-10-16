@@ -1,12 +1,24 @@
-import Header from '../components/Header';
-import Layout from '../components/Layout';
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 
-export default () => {
-   return(<Fragment>
-       <Layout>
-       <Header/>
-       <div>Welcome to next.js!</div>
-       </Layout>
-   </Fragment>);
+/**  Actions  **/
+import { getStocks } from '../actions';
+
+/**  Components  **/
+import Page from '../components/Page';
+import Layout from '../components/Layout';
+import GrowingToday from '../components/GrowingToday';
+
+
+class index extends Component{
+    render(){
+        return(<Fragment>
+            <Layout>
+                <div>Welcome to next.js!</div>
+                <GrowingToday {...this.props}/>
+            </Layout>
+        </Fragment>);
+    }
 }
+
+export default Page(connect(null, { getStocks })(index));
