@@ -14,7 +14,6 @@ class index extends Component{
     render(){
         return(<Fragment>
             <Layout>
-                <div>Welcome to next.js!</div>
                 <GrowingToday {...this.props}/>
             </Layout>
         </Fragment>);

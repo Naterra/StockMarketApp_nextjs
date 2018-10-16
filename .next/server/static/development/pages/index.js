@@ -182,7 +182,82 @@ function (_Component) {
           lineNumber: 13
         },
         __self: this
-      }, "GrowingToday");
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 14
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 15
+        },
+        __self: this
+      }, "Growing Today")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 17
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s12 m12",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 18
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card  ",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 19
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-content white-text",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 20
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: "card-title",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 21
+        },
+        __self: this
+      }, "Card Title"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 22
+        },
+        __self: this
+      }, "I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "card-action",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 25
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "#",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 26
+        },
+        __self: this
+      }, "This is a link"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "#",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 27
+        },
+        __self: this
+      }, "This is a link"))))));
     }
   }]);
 
@@ -538,16 +613,10 @@ function (_Component) {
           lineNumber: 16
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_GrowingToday__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, this.props, {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 17
-        },
-        __self: this
-      }, "Welcome to next.js!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_GrowingToday__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, this.props, {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 18
         },
         __self: this
       }))));
