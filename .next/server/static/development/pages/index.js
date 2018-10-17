@@ -97,7 +97,7 @@ module.exports =
 /*!**************************!*\
   !*** ./actions/index.js ***!
   \**************************/
-/*! exports provided: getTopStocks, getYesterdayGainers, getYesterdayLosers, getGrowingToday */
+/*! exports provided: getTopStocks, getYesterdayGainers, getYesterdayLosers, getMostActives, getGrowingToday */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105,6 +105,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTopStocks", function() { return getTopStocks; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getYesterdayGainers", function() { return getYesterdayGainers; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getYesterdayLosers", function() { return getYesterdayLosers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMostActives", function() { return getMostActives; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGrowingToday", function() { return getGrowingToday; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "axios");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
@@ -130,7 +131,7 @@ var getYesterdayGainers = function getYesterdayGainers() {
     .then(function (res) {
       console.log('res', res.data);
       dispatch({
-        type: _types__WEBPACK_IMPORTED_MODULE_1__["YESTERDAY_GAINERS_LIST"],
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["GAINERS_LIST"],
         payload: res.data
       });
       return data;
@@ -144,7 +145,21 @@ var getYesterdayLosers = function getYesterdayLosers() {
     return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('https://api.iextrading.com/1.0/stock/market/list/losers').then(function (res) {
       // console.log('res', res.data);
       dispatch({
-        type: _types__WEBPACK_IMPORTED_MODULE_1__["YESTERDAY_LOSERS_LIST"],
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["LOSERS_LIST"],
+        payload: res.data
+      });
+      return data;
+    }).catch(function (err) {
+      console.log('then', err);
+    });
+  };
+};
+var getMostActives = function getMostActives() {
+  return function (dispatch, getState) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('https://api.iextrading.com/1.0/stock/market/list/mostactive').then(function (res) {
+      // console.log('res', res.data);
+      dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["MOST_ACTIVE"],
         payload: res.data
       });
       return data;
@@ -176,7 +191,7 @@ var getGrowingToday = function getGrowingToday() {
 /*!**************************!*\
   !*** ./actions/types.js ***!
   \**************************/
-/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, YESTERDAY_GAINERS_LIST, YESTERDAY_LOSERS_LIST */
+/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, GAINERS_LIST, LOSERS_LIST, MOST_ACTIVE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -184,13 +199,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_STOCKS", function() { return FETCH_STOCKS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_TOP_STOCKS", function() { return FETCH_TOP_STOCKS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GROWING_TODAY", function() { return GROWING_TODAY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "YESTERDAY_GAINERS_LIST", function() { return YESTERDAY_GAINERS_LIST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "YESTERDAY_LOSERS_LIST", function() { return YESTERDAY_LOSERS_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAINERS_LIST", function() { return GAINERS_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOSERS_LIST", function() { return LOSERS_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MOST_ACTIVE", function() { return MOST_ACTIVE; });
 var FETCH_STOCKS = "FETCH_STOCKS";
 var FETCH_TOP_STOCKS = "FETCH_TOP_STOCKS";
 var GROWING_TODAY = "GROWING_TODAY";
-var YESTERDAY_GAINERS_LIST = "YESTERDAY_GAINERS_LIST";
-var YESTERDAY_LOSERS_LIST = "YESTERDAY_LOSERS_LIST";
+/**  Lists **/
+
+var GAINERS_LIST = "GAINERS_LIST";
+var LOSERS_LIST = "LOSERS_LIST";
+var MOST_ACTIVE = "MOST_ACTIVE";
 
 /***/ }),
 
@@ -377,6 +396,321 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
 
 /***/ }),
 
+/***/ "./components/MostActives.js":
+/*!***********************************!*\
+  !*** ./components/MostActives.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "next/link");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _StockListRecord__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StockListRecord */ "./components/StockListRecord.js");
+var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/MostActives.js";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+/** Components  **/
+
+
+
+
+var GrowingToday =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(GrowingToday, _Component);
+
+  function GrowingToday(props) {
+    var _this;
+
+    _classCallCheck(this, GrowingToday);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GrowingToday).call(this, props));
+    _this.getTable = _this.getTable.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(GrowingToday, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      setInterval(function () {
+        _this2.props.getMostActives();
+      }, 2000);
+    }
+  }, {
+    key: "getTable",
+    value: function getTable() {
+      var lists = this.props.lists;
+      if (!lists || !lists.most_active) return false;
+      var list = lists.most_active.map(function (stock, i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_StockListRecord__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          key: i,
+          stock: stock,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 22
+          },
+          __self: this
+        });
+      });
+      var tableHead = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "header row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 25
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 26
+        },
+        __self: this
+      }, "Symbol"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 27
+        },
+        __self: this
+      }, "Last Price"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 28
+        },
+        __self: this
+      }, "Change"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 29
+        },
+        __self: this
+      }, "% Change"));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 33
+        },
+        __self: this
+      }, tableHead, list);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var lists = this.props.lists;
+      if (!lists || !lists.most_active) return false;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "growing-today",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 45
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        className: "list-title",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 46
+        },
+        __self: this
+      }, "Stocks: Most Actives"), this.getTable());
+    }
+  }]);
+
+  return GrowingToday;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (GrowingToday);
+
+/***/ }),
+
+/***/ "./components/StockListRecord.js":
+/*!***************************************!*\
+  !*** ./components/StockListRecord.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/StockListRecord.js";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+var StockRecord =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(StockRecord, _Component);
+
+  function StockRecord(props) {
+    var _this;
+
+    _classCallCheck(this, StockRecord);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(StockRecord).call(this, props));
+    _this.state = {
+      change_dir: ''
+    };
+    /**  Events  **/
+    // this.getChangeDirection = this.getChangeDirection.bind(this);
+
+    return _this;
+  }
+
+  _createClass(StockRecord, [{
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState) {
+      var _this2 = this;
+
+      // console.error('componentDidUpdate');
+      var stock = this.props.stock;
+
+      if (prevProps.stock.change !== stock.change) {
+        if (stock.change > prevProps.stock.change) {
+          this.setState({
+            change_dir: 'grow'
+          });
+        }
+
+        if (stock.change < prevProps.stock.change) {
+          this.setState({
+            change_dir: 'lose'
+          });
+        }
+
+        setTimeout(function () {
+          _this2.setState({
+            change_dir: ''
+          });
+        }, 500); // this.getChangeDirection('change',prevProps.stock.change,  stock.change);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var stock = this.props.stock;
+      var change_dir = this.state.change_dir; // console.error('Render::state', this.state);
+
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 39
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 40
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "blue-text",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 41
+        },
+        __self: this
+      }, stock.symbol)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 43
+        },
+        __self: this
+      }, stock.latestPrice), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3 " + (stock.change >= 0 ? 'green-text' : 'red-text'),
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 44
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: change_dir,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 45
+        },
+        __self: this
+      }, stock.change >= 0 ? '+' : '', stock.change)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3 " + (stock.changePercent >= 0 ? 'green-text' : 'red-text'),
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 50
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        className: change_dir,
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 51
+        },
+        __self: this
+      }, stock.changePercent >= 0 ? '+' : '', stock.changePercent, "%")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "company-name col s12",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 56
+        },
+        __self: this
+      }, stock.companyName));
+    }
+  }]);
+
+  return StockRecord;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (StockRecord);
+
+/***/ }),
+
 /***/ "./components/YesterdayGainers.js":
 /*!****************************************!*\
   !*** ./components/YesterdayGainers.js ***!
@@ -390,6 +724,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "next/link");
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _StockListRecord__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StockListRecord */ "./components/StockListRecord.js");
 var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/YesterdayGainers.js";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -413,6 +748,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
  // import GrowingTodayChart from './charts/growingTodayChart';
 
 /** Components  **/
+
 
 
 
@@ -440,100 +776,59 @@ function (_Component) {
     key: "getTable",
     value: function getTable() {
       // console.log('getTable', this.props);
-      var stocks = this.props.stocks;
-      if (!stocks || !stocks.yesterday_gainers) return;
-      var list = stocks.yesterday_gainers.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "row",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 22
-          },
-          __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
+      var lists = this.props.lists;
+      if (!lists || !lists.gainers) return;
+      var list = lists.gainers.map(function (stock, i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_StockListRecord__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          key: i,
+          stock: stock,
           __source: {
             fileName: _jsxFileName,
             lineNumber: 23
           },
           __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "blue-text",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 24
-          },
-          __self: this
-        }, i.symbol)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 26
-          },
-          __self: this
-        }, i.latestPrice), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 27
-          },
-          __self: this
-        }, i.change), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 28
-          },
-          __self: this
-        }, i.changePercent), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "company-name col s12",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 29
-          },
-          __self: this
-        }, i.companyName));
+        });
       });
       var tableHead = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "header row",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 33
+          lineNumber: 26
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 34
+          lineNumber: 27
         },
         __self: this
       }, "Symbol"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 35
+          lineNumber: 28
         },
         __self: this
       }, "Last Price"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 36
+          lineNumber: 29
         },
         __self: this
       }, "Change"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 37
+          lineNumber: 30
         },
         __self: this
       }, "% Change"));
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 41
+          lineNumber: 34
         },
         __self: this
       }, tableHead, list);
@@ -545,16 +840,17 @@ function (_Component) {
         className: "growing-today",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 50
+          lineNumber: 43
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        className: "list-title",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 52
+          lineNumber: 45
         },
         __self: this
-      }, "Yesterday Gainers"), this.getTable());
+      }, "Stocks:Gainers"), this.getTable());
     }
   }]);
 
@@ -578,6 +874,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "next/link");
 /* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _StockListRecord__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StockListRecord */ "./components/StockListRecord.js");
 var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/YesterdayLosers.js";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -601,6 +898,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
  // import GrowingTodayChart from './charts/growingTodayChart';
 
 /** Components  **/
+
 
 
 
@@ -628,100 +926,59 @@ function (_Component) {
     key: "getTable",
     value: function getTable() {
       // console.log('getTable', this.props);
-      var stocks = this.props.stocks;
-      if (!stocks || !stocks.yesterday_gainers) return;
-      var list = stocks.yesterday_gainers.map(function (i) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "row",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 22
-          },
-          __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
+      var lists = this.props.lists;
+      if (!lists || !lists.losers) return;
+      var list = lists.losers.map(function (stock, i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_StockListRecord__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          key: i,
+          stock: stock,
           __source: {
             fileName: _jsxFileName,
             lineNumber: 23
           },
           __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "blue-text",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 24
-          },
-          __self: this
-        }, i.symbol)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 26
-          },
-          __self: this
-        }, i.latestPrice), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 27
-          },
-          __self: this
-        }, i.change), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "col s3",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 28
-          },
-          __self: this
-        }, i.changePercent), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          className: "company-name col s12",
-          __source: {
-            fileName: _jsxFileName,
-            lineNumber: 29
-          },
-          __self: this
-        }, i.companyName));
+        });
       });
       var tableHead = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "header row",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 33
+          lineNumber: 26
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 34
+          lineNumber: 27
         },
         __self: this
       }, "Symbol"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 35
+          lineNumber: 28
         },
         __self: this
       }, "Last Price"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 36
+          lineNumber: 29
         },
         __self: this
       }, "Change"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 37
+          lineNumber: 30
         },
         __self: this
       }, "% Change"));
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 41
+          lineNumber: 34
         },
         __self: this
       }, tableHead, list);
@@ -733,16 +990,17 @@ function (_Component) {
         className: "growing-today",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 50
+          lineNumber: 43
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        className: "list-title",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 52
+          lineNumber: 45
         },
         __self: this
-      }, "Yesterday Losers"), this.getTable());
+      }, "Stocks:Losers"), this.getTable());
     }
   }]);
 
@@ -770,6 +1028,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Layout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Layout */ "./components/Layout.js");
 /* harmony import */ var _components_YesterdayGainers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/YesterdayGainers */ "./components/YesterdayGainers.js");
 /* harmony import */ var _components_YesterdayLosers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/YesterdayLosers */ "./components/YesterdayLosers.js");
+/* harmony import */ var _components_MostActives__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/MostActives */ "./components/MostActives.js");
 var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/pages/index.js";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -803,6 +1062,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var index =
 /*#__PURE__*/
 function (_Component) {
@@ -820,46 +1080,52 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 15
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        __source: {
-          fileName: _jsxFileName,
           lineNumber: 16
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row",
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_3__["default"], {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 17
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col s9",
+        className: "row",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 18
         },
         __self: this
-      }, "hello"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col s3",
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s8",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 19
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayGainers__WEBPACK_IMPORTED_MODULE_4__["default"], _extends({}, this.props, {
+      }, "hello"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s4",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 20
         },
         __self: this
-      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayLosers__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, this.props, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_MostActives__WEBPACK_IMPORTED_MODULE_6__["default"], _extends({}, this.props, {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 21
+        },
+        __self: this
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayGainers__WEBPACK_IMPORTED_MODULE_4__["default"], _extends({}, this.props, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 22
+        },
+        __self: this
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayLosers__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, this.props, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 23
         },
         __self: this
       }))))));
@@ -871,7 +1137,8 @@ function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
   return {
-    stocks: state.stocks
+    stocks: state.stocks,
+    lists: state.lists
   };
 };
 
@@ -879,7 +1146,8 @@ var mapStateToProps = function mapStateToProps(state) {
   getTopStocks: _actions__WEBPACK_IMPORTED_MODULE_2__["getTopStocks"],
   getGrowingToday: _actions__WEBPACK_IMPORTED_MODULE_2__["getGrowingToday"],
   getYesterdayGainers: _actions__WEBPACK_IMPORTED_MODULE_2__["getYesterdayGainers"],
-  getYesterdayLosers: _actions__WEBPACK_IMPORTED_MODULE_2__["getYesterdayLosers"]
+  getYesterdayLosers: _actions__WEBPACK_IMPORTED_MODULE_2__["getYesterdayLosers"],
+  getMostActives: _actions__WEBPACK_IMPORTED_MODULE_2__["getMostActives"]
 })(index));
 
 /***/ }),

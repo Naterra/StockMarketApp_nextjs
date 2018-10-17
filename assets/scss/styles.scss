@@ -4,21 +4,43 @@
   }
 }
 
+
+//@keyframes listAnimation {
+//  0%  {background: red;}
+//  50%  {background-color: red;}
+//  100%  {background: none;}
+//}
+
+
+
 .growing-today{
   .company-name{
     font-size: 10px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    color: #666;
   }
   .header{
-    font-size: 12px;
+    font-size: 11px;
     white-space: nowrap;
-    
-
+    color: #666;
   }
   .row{
     border-bottom: 1px solid #eee;
-    padding-bottom: 5px;
+    padding: 5px 0;
+    margin-bottom: 0;
+  }
+
+  .list-title{
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .grow{
+    background-color:#e1fbd6;
+  }
+  .lose{
+    background-color:#ffe7e5;
   }
 }

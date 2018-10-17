@@ -97,7 +97,7 @@ module.exports =
 /*!**************************!*\
   !*** ./actions/types.js ***!
   \**************************/
-/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, YESTERDAY_GAINERS_LIST, YESTERDAY_LOSERS_LIST */
+/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, GAINERS_LIST, LOSERS_LIST, MOST_ACTIVE */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -105,13 +105,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_STOCKS", function() { return FETCH_STOCKS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_TOP_STOCKS", function() { return FETCH_TOP_STOCKS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GROWING_TODAY", function() { return GROWING_TODAY; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "YESTERDAY_GAINERS_LIST", function() { return YESTERDAY_GAINERS_LIST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "YESTERDAY_LOSERS_LIST", function() { return YESTERDAY_LOSERS_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAINERS_LIST", function() { return GAINERS_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOSERS_LIST", function() { return LOSERS_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MOST_ACTIVE", function() { return MOST_ACTIVE; });
 var FETCH_STOCKS = "FETCH_STOCKS";
 var FETCH_TOP_STOCKS = "FETCH_TOP_STOCKS";
 var GROWING_TODAY = "GROWING_TODAY";
-var YESTERDAY_GAINERS_LIST = "YESTERDAY_GAINERS_LIST";
-var YESTERDAY_LOSERS_LIST = "YESTERDAY_LOSERS_LIST";
+/**  Lists **/
+
+var GAINERS_LIST = "GAINERS_LIST";
+var LOSERS_LIST = "LOSERS_LIST";
+var MOST_ACTIVE = "MOST_ACTIVE";
 
 /***/ }),
 
@@ -254,20 +258,65 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! redux-thunk */ "redux-thunk");
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(redux_thunk__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _stocksReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./stocksReducer */ "./reducer/stocksReducer.js");
+/* harmony import */ var _listsReducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./listsReducer */ "./reducer/listsReducer.js");
 
 
 
 /**   Reducers  **/
 
 
+
 var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  stocks: _stocksReducer__WEBPACK_IMPORTED_MODULE_3__["default"]
+  stocks: _stocksReducer__WEBPACK_IMPORTED_MODULE_3__["default"],
+  lists: _listsReducer__WEBPACK_IMPORTED_MODULE_4__["default"]
 });
 var initialState = {};
 var initializeStore = function initializeStore() {
   return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(rootReducer, initialState, Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_1__["composeWithDevTools"])(Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2___default.a)));
 };
 /* harmony default export */ __webpack_exports__["default"] = (Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(rootReducer, initialState, Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_1__["composeWithDevTools"])(Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2___default.a))));
+
+/***/ }),
+
+/***/ "./reducer/listsReducer.js":
+/*!*********************************!*\
+  !*** ./reducer/listsReducer.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/types */ "./actions/types.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["LOSERS_LIST"]:
+      return _objectSpread({}, state, {
+        losers: action.payload
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["GAINERS_LIST"]:
+      return _objectSpread({}, state, {
+        gainers: action.payload
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["MOST_ACTIVE"]:
+      return _objectSpread({}, state, {
+        most_active: action.payload
+      });
+
+    default:
+      return state;
+  }
+});
 
 /***/ }),
 
@@ -291,11 +340,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["YESTERDAY_GAINERS_LIST"]:
-      return _objectSpread({}, state, {
-        yesterday_gainers: action.payload
-      });
-
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_TOP_STOCKS"]:
       return _objectSpread({}, state, {
         top: action.payload

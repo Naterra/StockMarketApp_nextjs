@@ -20,7 +20,7 @@ export const getYesterdayGainers = ()=> (dispatch, getState) =>{
 
 
 
-            dispatch({ type: types.YESTERDAY_GAINERS_LIST, payload:res.data });
+            dispatch({ type: types.GAINERS_LIST, payload:res.data });
             return data;
         })
         .catch(err=>{
@@ -34,7 +34,21 @@ export const getYesterdayLosers = ()=> (dispatch, getState) =>{
         .then(res => {
             // console.log('res', res.data);
 
-            dispatch({ type: types.YESTERDAY_LOSERS_LIST, payload:res.data });
+            dispatch({ type: types.LOSERS_LIST, payload:res.data });
+            return data;
+        })
+        .catch(err=>{
+            console.log('then', err);
+        });
+
+};
+
+export const getMostActives = ()=> (dispatch, getState) =>{
+    return axios.get('https://api.iextrading.com/1.0/stock/market/list/mostactive')
+        .then(res => {
+            // console.log('res', res.data);
+
+            dispatch({ type: types.MOST_ACTIVE, payload:res.data });
             return data;
         })
         .catch(err=>{

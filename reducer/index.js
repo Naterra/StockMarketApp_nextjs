@@ -4,10 +4,12 @@ import thunkMiddleware from 'redux-thunk';
 
 /**   Reducers  **/
 import stocksReducer from './stocksReducer';
+import listsReducer from './listsReducer';
 
 
 const rootReducer = combineReducers({
-    stocks: stocksReducer
+    stocks: stocksReducer,
+    lists: listsReducer
 });
 
 let initialState={};

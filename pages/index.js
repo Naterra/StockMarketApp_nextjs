@@ -2,12 +2,13 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 /**  Actions  **/
-import { getTopStocks, getGrowingToday, getYesterdayGainers, getYesterdayLosers } from '../actions';
+import { getTopStocks, getGrowingToday, getYesterdayGainers, getYesterdayLosers, getMostActives } from '../actions';
 
 /**  Components  **/
 import Layout from '../components/Layout';
 import YesterdayGainers from '../components/YesterdayGainers';
 import YesterdayLosers from '../components/YesterdayLosers';
+import MostActives from '../components/MostActives';
 
 class index extends Component {
 	render() {
@@ -15,8 +16,9 @@ class index extends Component {
 			<Fragment>
 				<Layout>
 					<div className="row">
-						<div className="col s9">hello</div>
-						<div className="col s3">
+						<div className="col s8">hello</div>
+						<div className="col s4">
+							<MostActives {...this.props} />
 							<YesterdayGainers {...this.props} />
 							<YesterdayLosers {...this.props} />
 						</div>
@@ -27,7 +29,10 @@ class index extends Component {
 	}
 }
 const mapStateToProps = state => {
-	return { stocks: state.stocks };
+	return {
+		stocks: state.stocks,
+        lists: state.lists
+	};
 };
 
-export default connect(mapStateToProps, { getTopStocks, getGrowingToday, getYesterdayGainers, getYesterdayLosers })(index);
+export default connect(mapStateToProps, { getTopStocks, getGrowingToday, getYesterdayGainers, getYesterdayLosers, getMostActives })(index);

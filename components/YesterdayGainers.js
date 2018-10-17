@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 
 /** Components  **/
 import Link from 'next/link';
+import StockListRecord from './StockListRecord';
 
 class GrowingToday extends Component {
 	constructor(props) {
@@ -15,19 +16,11 @@ class GrowingToday extends Component {
     }
 	getTable() {
 		// console.log('getTable', this.props);
-		const { stocks } = this.props;
-		if (!stocks || !stocks.yesterday_gainers) return ;
+		const { lists } = this.props;
+		if (!lists || !lists.gainers) return ;
 
-		const list = stocks.yesterday_gainers.map(i => {
-			return (<div className="row">
-				<div className="col s3">
-					<div className="blue-text">{i.symbol}</div>
-				</div>
-				<div  className="col s3">{i.latestPrice}</div>
-				<div className="col s3">{i.change}</div>
-				<div className="col s3">{i.changePercent}</div>
-				<div className="company-name col s12">{i.companyName}</div>
-			</div>);
+		const list = lists.gainers.map((stock, i) => {
+            return <StockListRecord key={i} stock={stock}/>
 		});
 
 		const tableHead = (<div className="header row">
@@ -49,7 +42,7 @@ class GrowingToday extends Component {
 		return (
 			<div className="growing-today">
 
-					<h5>Yesterday Gainers</h5>
+					<h3 className="list-title">Stocks:Gainers</h3>
 					{this.getTable()}
 
 			</div>

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-// import GrowingTodayChart from './charts/growingTodayChart';
 
 /** Components  **/
 import Link from 'next/link';
 import StockListRecord from './StockListRecord';
+
+
 
 class GrowingToday extends Component {
 	constructor(props) {
@@ -11,16 +12,14 @@ class GrowingToday extends Component {
 		this.getTable = this.getTable.bind(this);
 	}
 	componentDidMount() {
-        this.props.getYesterdayLosers();
-
+        setInterval(()=>{ this.props.getMostActives(); }, 2000);
     }
 	getTable() {
-		// console.log('getTable', this.props);
-		const { lists } = this.props;
-		if (!lists || !lists.losers) return ;
+        const { lists } = this.props;
+        if (!lists || !lists.most_active) return false ;
 
-		const list = lists.losers.map((stock, i) => {
-            return <StockListRecord key={i} stock={stock}/>
+		const list = lists.most_active.map((stock, i) => {
+			return <StockListRecord key={i} stock={stock}/>
 		});
 
 		const tableHead = (<div className="header row">
@@ -39,12 +38,13 @@ class GrowingToday extends Component {
 	}
 
 	render() {
+        const { lists } = this.props;
+        if (!lists || !lists.most_active) return false ;
+
 		return (
 			<div className="growing-today">
-
-					<h3 className="list-title">Stocks:Losers</h3>
+					<h3 className="list-title">Stocks: Most Actives</h3>
 					{this.getTable()}
-
 			</div>
 		);
 	}

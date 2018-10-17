@@ -20,15 +20,28 @@
   font-size: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden; }
+  overflow: hidden;
+  color: #666; }
 
 .growing-today .header {
-  font-size: 12px;
-  white-space: nowrap; }
+  font-size: 11px;
+  white-space: nowrap;
+  color: #666; }
 
 .growing-today .row {
   border-bottom: 1px solid #eee;
-  padding-bottom: 5px; }
+  padding: 5px 0;
+  margin-bottom: 0; }
+
+.growing-today .list-title {
+  font-size: 14px;
+  font-weight: bold; }
+
+.growing-today .grow {
+  background-color: #e1fbd6; }
+
+.growing-today .lose {
+  background-color: #ffe7e5; }
 
 
 /*# sourceMappingURL=styles.chunk.css.map*/
