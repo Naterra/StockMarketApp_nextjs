@@ -3,6 +3,7 @@ dist
 
 # dependencies
 node_modules/
+.next
 *.log
 .DS_Store
 *.tmp

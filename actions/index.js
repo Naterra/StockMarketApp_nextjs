@@ -1,11 +1,63 @@
 import axios from 'axios';
+import * as types from "./types";
 
-export const getStocks = ()=> dispatch =>{
-    axios.get('/api/items')
+export const getTopStocks = ()=> dispatch =>{
+    axios.get('https://api.iextrading.com/1.0/tops')
         .then(res => {
-           console.log('res', res);
+           // console.log('res', res);
+           dispatch({ type: types.FETCH_TOP_STOCKS, payload: res.data  });
         })
-        .then(err=>{
+        .catch(err=>{
             console.log('then', err);
         });
 };
+
+export const getYesterdayGainers = ()=> (dispatch, getState) =>{
+    return axios.get('https://api.iextrading.com/1.0/stock/market/list/gainers')
+    // return axios.get('https://api.iextrading.com/1.0/stock/market/batch?types=quote')
+        .then(res => {
+            console.log('res', res.data);
+
+
+
+            dispatch({ type: types.YESTERDAY_GAINERS_LIST, payload:res.data });
+            return data;
+        })
+        .catch(err=>{
+            console.log('then', err);
+        });
+
+};
+
+export const getYesterdayLosers = ()=> (dispatch, getState) =>{
+    return axios.get('https://api.iextrading.com/1.0/stock/market/list/losers')
+        .then(res => {
+            // console.log('res', res.data);
+
+            dispatch({ type: types.YESTERDAY_LOSERS_LIST, payload:res.data });
+            return data;
+        })
+        .catch(err=>{
+            console.log('then', err);
+        });
+
+};
+
+
+export const getGrowingToday = ()=> (dispatch, getState) =>{
+    // return axios.get('https://api.iextrading.com/1.0/stock/market/list/gainers')
+    // // return axios.get('https://api.iextrading.com/1.0/stock/market/batch?types=quote')
+    //     .then(res => {
+    //         console.log('res', res.data);
+    //
+    //
+    //
+    //         dispatch({ type: types.GROWING_TODAY, payload:res.data });
+    //         return data;
+    //     })
+    //     .catch(err=>{
+    //         console.log('then', err);
+    //     });
+
+};
+

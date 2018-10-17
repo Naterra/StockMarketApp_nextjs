@@ -1,8 +1,8 @@
 import React from 'react'
-import {initializeStore} from '../store'
+import {initializeStore} from '../reducer/index';
 
-const isServer = typeof window === 'undefined'
-const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__'
+const isServer = typeof window === 'undefined';
+const __NEXT_REDUX_STORE__ = '__NEXT_REDUX_STORE__';
 
 function getOrCreateStore (initialState) {
     // Always make a new store if server, otherwise state is shared between requests

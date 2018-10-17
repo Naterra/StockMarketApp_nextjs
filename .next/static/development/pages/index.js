@@ -4,174 +4,100 @@
 /*!**************************!*\
   !*** ./actions/index.js ***!
   \**************************/
-/*! exports provided: getStocks */
+/*! exports provided: getTopStocks, getYesterdayGainers, getYesterdayLosers, getGrowingToday */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStocks", function() { return getStocks; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTopStocks", function() { return getTopStocks; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getYesterdayGainers", function() { return getYesterdayGainers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getYesterdayLosers", function() { return getYesterdayLosers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getGrowingToday", function() { return getGrowingToday; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./types */ "./actions/types.js");
 
-var getStocks = function getStocks() {
+
+var getTopStocks = function getTopStocks() {
   return function (dispatch) {
-    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/items').then(function (res) {
-      console.log('res', res);
-    }).then(function (err) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('https://api.iextrading.com/1.0/tops').then(function (res) {
+      // console.log('res', res);
+      dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["FETCH_TOP_STOCKS"],
+        payload: res.data
+      });
+    }).catch(function (err) {
       console.log('then', err);
     });
+  };
+};
+var getYesterdayGainers = function getYesterdayGainers() {
+  return function (dispatch, getState) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('https://api.iextrading.com/1.0/stock/market/list/gainers') // return axios.get('https://api.iextrading.com/1.0/stock/market/batch?types=quote')
+    .then(function (res) {
+      console.log('res', res.data);
+      dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["YESTERDAY_GAINERS_LIST"],
+        payload: res.data
+      });
+      return data;
+    }).catch(function (err) {
+      console.log('then', err);
+    });
+  };
+};
+var getYesterdayLosers = function getYesterdayLosers() {
+  return function (dispatch, getState) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('https://api.iextrading.com/1.0/stock/market/list/losers').then(function (res) {
+      // console.log('res', res.data);
+      dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["YESTERDAY_LOSERS_LIST"],
+        payload: res.data
+      });
+      return data;
+    }).catch(function (err) {
+      console.log('then', err);
+    });
+  };
+};
+var getGrowingToday = function getGrowingToday() {
+  return function (dispatch, getState) {// return axios.get('https://api.iextrading.com/1.0/stock/market/list/gainers')
+    // // return axios.get('https://api.iextrading.com/1.0/stock/market/batch?types=quote')
+    //     .then(res => {
+    //         console.log('res', res.data);
+    //
+    //
+    //
+    //         dispatch({ type: types.GROWING_TODAY, payload:res.data });
+    //         return data;
+    //     })
+    //     .catch(err=>{
+    //         console.log('then', err);
+    //     });
   };
 };
 
 /***/ }),
 
-/***/ "./components/GrowingToday.js":
-/*!************************************!*\
-  !*** ./components/GrowingToday.js ***!
-  \************************************/
-/*! exports provided: default */
+/***/ "./actions/types.js":
+/*!**************************!*\
+  !*** ./actions/types.js ***!
+  \**************************/
+/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, YESTERDAY_GAINERS_LIST, YESTERDAY_LOSERS_LIST */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
-/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
-var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/GrowingToday.js";
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
- // import { connect } from 'react-redux';
-
-/** Components  **/
-
- // import { getStocks } from '../actions';
-
-var GrowingToday =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(GrowingToday, _Component);
-
-  function GrowingToday() {
-    _classCallCheck(this, GrowingToday);
-
-    return _possibleConstructorReturn(this, _getPrototypeOf(GrowingToday).apply(this, arguments));
-  }
-
-  _createClass(GrowingToday, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.props.getStocks();
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 13
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 14
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 15
-        },
-        __self: this
-      }, "Growing Today")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 17
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col s12 m12",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 18
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card  ",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 19
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-content white-text",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 20
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
-        className: "card-title",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 21
-        },
-        __self: this
-      }, "Card Title"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 22
-        },
-        __self: this
-      }, "I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "card-action",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 25
-        },
-        __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "#",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 26
-        },
-        __self: this
-      }, "This is a link"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "#",
-        __source: {
-          fileName: _jsxFileName,
-          lineNumber: 27
-        },
-        __self: this
-      }, "This is a link"))))));
-    }
-  }]);
-
-  return GrowingToday;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
-
-/* harmony default export */ __webpack_exports__["default"] = (GrowingToday);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_STOCKS", function() { return FETCH_STOCKS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_TOP_STOCKS", function() { return FETCH_TOP_STOCKS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GROWING_TODAY", function() { return GROWING_TODAY; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "YESTERDAY_GAINERS_LIST", function() { return YESTERDAY_GAINERS_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "YESTERDAY_LOSERS_LIST", function() { return YESTERDAY_LOSERS_LIST; });
+var FETCH_STOCKS = "FETCH_STOCKS";
+var FETCH_TOP_STOCKS = "FETCH_TOP_STOCKS";
+var GROWING_TODAY = "GROWING_TODAY";
+var YESTERDAY_GAINERS_LIST = "YESTERDAY_GAINERS_LIST";
+var YESTERDAY_LOSERS_LIST = "YESTERDAY_LOSERS_LIST";
 
 /***/ }),
 
@@ -195,14 +121,21 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("nav", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 3
+      lineNumber: 4
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "nav-wrapper  teal lighten-2",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 4
+      lineNumber: 5
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "container",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 6
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
@@ -210,7 +143,7 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
     className: "brand-logo",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 6
+      lineNumber: 7
     },
     __self: this
   }, "Logo"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", {
@@ -218,48 +151,48 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
     className: "right hide-on-med-and-down",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 7
+      lineNumber: 10
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 11
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
     href: "/test1",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 12
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 13
     },
     __self: this
-  }, "Test 1")), "  "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
+  }, "Test 1"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9
+      lineNumber: 16
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_link__WEBPACK_IMPORTED_MODULE_1___default.a, {
     href: "/test2",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9
+      lineNumber: 17
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 9
+      lineNumber: 18
     },
     __self: this
-  }, "Test 2")), "  "))));
+  }, "Test 2")))))));
 });
 
 /***/ }),
@@ -277,47 +210,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/head */ "./node_modules/next/head.js");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var materialize_css_dist_css_materialize_min_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! materialize-css/dist/css/materialize.min.css */ "./node_modules/materialize-css/dist/css/materialize.min.css");
-/* harmony import */ var materialize_css_dist_css_materialize_min_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(materialize_css_dist_css_materialize_min_css__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Header */ "./components/Header.js");
+/* harmony import */ var _components_Header__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/Header */ "./components/Header.js");
 var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/Layout.js";
 
-
- // import 'materialize-css/dist/js/materialize.min.js';
 
 
 /* harmony default export */ __webpack_exports__["default"] = (function (props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 8
+      lineNumber: 6
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(next_head__WEBPACK_IMPORTED_MODULE_1___default.a, {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 10
+      lineNumber: 7
     },
     __self: this
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("title", {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 11
+      lineNumber: 8
     },
     __self: this
   }, "Hello"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("link", {
-    rel: "stylesheet",
-    href: "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css",
+    rel: "icon",
+    type: "image/x-icon",
+    href: "/static/grow-icon.png",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 13
+      lineNumber: 9
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("script", {
     src: "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 14
+      lineNumber: 11
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("link", {
@@ -325,7 +255,7 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
     href: "https://fonts.googleapis.com/css?family=Roboto:300,400,500",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 15
+      lineNumber: 12
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("meta", {
@@ -333,20 +263,20 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
     content: "width=device-width, initial-scale=1.0",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 16
+      lineNumber: 13
     },
     __self: this
-  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Header__WEBPACK_IMPORTED_MODULE_2__["default"], {
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 18
+      lineNumber: 15
     },
     __self: this
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "container",
     __source: {
       fileName: _jsxFileName,
-      lineNumber: 20
+      lineNumber: 17
     },
     __self: this
   }, props.children));
@@ -354,10 +284,10 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
 
 /***/ }),
 
-/***/ "./components/Page.js":
-/*!****************************!*\
-  !*** ./components/Page.js ***!
-  \****************************/
+/***/ "./components/YesterdayGainers.js":
+/*!****************************************!*\
+  !*** ./components/YesterdayGainers.js ***!
+  \****************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -365,9 +295,9 @@ var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/compon
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _reducer_index__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../reducer/index */ "./reducer/index.js");
-var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/Page.js";
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/YesterdayGainers.js";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -379,7 +309,193 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+ // import GrowingTodayChart from './charts/growingTodayChart';
+
+/** Components  **/
+
+
+
+var GrowingToday =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(GrowingToday, _Component);
+
+  function GrowingToday(props) {
+    var _this;
+
+    _classCallCheck(this, GrowingToday);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GrowingToday).call(this, props));
+    _this.getTable = _this.getTable.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(GrowingToday, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.getYesterdayGainers();
+    }
+  }, {
+    key: "getTable",
+    value: function getTable() {
+      // console.log('getTable', this.props);
+      var stocks = this.props.stocks;
+      if (!stocks || !stocks.yesterday_gainers) return;
+      var list = stocks.yesterday_gainers.map(function (i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 22
+          },
+          __self: this
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 23
+          },
+          __self: this
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "blue-text",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 24
+          },
+          __self: this
+        }, i.symbol)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 26
+          },
+          __self: this
+        }, i.latestPrice), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 27
+          },
+          __self: this
+        }, i.change), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 28
+          },
+          __self: this
+        }, i.changePercent), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "company-name col s12",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 29
+          },
+          __self: this
+        }, i.companyName));
+      });
+      var tableHead = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "header row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 33
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 34
+        },
+        __self: this
+      }, "Symbol"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 35
+        },
+        __self: this
+      }, "Last Price"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 36
+        },
+        __self: this
+      }, "Change"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 37
+        },
+        __self: this
+      }, "% Change"));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 41
+        },
+        __self: this
+      }, tableHead, list);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "growing-today",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 50
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 52
+        },
+        __self: this
+      }, "Yesterday Gainers"), this.getTable());
+    }
+  }]);
+
+  return GrowingToday;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (GrowingToday);
+
+/***/ }),
+
+/***/ "./components/YesterdayLosers.js":
+/*!***************************************!*\
+  !*** ./components/YesterdayLosers.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/YesterdayLosers.js";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
@@ -387,48 +503,160 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+ // import GrowingTodayChart from './charts/growingTodayChart';
+
+/** Components  **/
 
 
 
+var GrowingToday =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(GrowingToday, _Component);
 
-var page = function page(Page) {
-  return (
-    /*#__PURE__*/
-    function (_React$Component) {
-      _inherits(PageWrapper, _React$Component);
+  function GrowingToday(props) {
+    var _this;
 
-      function PageWrapper() {
-        _classCallCheck(this, PageWrapper);
+    _classCallCheck(this, GrowingToday);
 
-        return _possibleConstructorReturn(this, _getPrototypeOf(PageWrapper).apply(this, arguments));
-      }
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(GrowingToday).call(this, props));
+    _this.getTable = _this.getTable.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
 
-      _createClass(PageWrapper, [{
-        key: "render",
-        value: function render() {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_redux__WEBPACK_IMPORTED_MODULE_1__["Provider"], {
-            store: _reducer_index__WEBPACK_IMPORTED_MODULE_2__["default"],
-            __source: {
-              fileName: _jsxFileName,
-              lineNumber: 9
-            },
-            __self: this
-          }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Page, {
-            __source: {
-              fileName: _jsxFileName,
-              lineNumber: 10
-            },
-            __self: this
-          }));
-        }
-      }]);
+  _createClass(GrowingToday, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.getYesterdayLosers();
+    }
+  }, {
+    key: "getTable",
+    value: function getTable() {
+      // console.log('getTable', this.props);
+      var stocks = this.props.stocks;
+      if (!stocks || !stocks.yesterday_gainers) return;
+      var list = stocks.yesterday_gainers.map(function (i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "row",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 22
+          },
+          __self: this
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 23
+          },
+          __self: this
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "blue-text",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 24
+          },
+          __self: this
+        }, i.symbol)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 26
+          },
+          __self: this
+        }, i.latestPrice), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 27
+          },
+          __self: this
+        }, i.change), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "col s3",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 28
+          },
+          __self: this
+        }, i.changePercent), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "company-name col s12",
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 29
+          },
+          __self: this
+        }, i.companyName));
+      });
+      var tableHead = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "header row",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 33
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 34
+        },
+        __self: this
+      }, "Symbol"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 35
+        },
+        __self: this
+      }, "Last Price"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 36
+        },
+        __self: this
+      }, "Change"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 37
+        },
+        __self: this
+      }, "% Change"));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 41
+        },
+        __self: this
+      }, tableHead, list);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "growing-today",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 50
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 52
+        },
+        __self: this
+      }, "Yesterday Losers"), this.getTable());
+    }
+  }]);
 
-      return PageWrapper;
-    }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component)
-  );
-};
+  return GrowingToday;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (page);
+/* harmony default export */ __webpack_exports__["default"] = (GrowingToday);
 
 /***/ }),
 
@@ -12621,70 +12849,6 @@ module.exports = (__webpack_require__(/*! dll-reference dll_5d62d38be3592dca3a42
 
 /***/ }),
 
-/***/ "./node_modules/redux-devtools-extension/index.js":
-/*!********************************************************!*\
-  !*** ./node_modules/redux-devtools-extension/index.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var compose = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js").compose;
-
-exports.__esModule = true;
-exports.composeWithDevTools = (
-  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
-    function() {
-      if (arguments.length === 0) return undefined;
-      if (typeof arguments[0] === 'object') return compose;
-      return compose.apply(null, arguments);
-    }
-);
-
-exports.devToolsEnhancer = (
-  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
-    window.__REDUX_DEVTOOLS_EXTENSION__ :
-    function() { return function(noop) { return noop; } }
-);
-
-
-/***/ }),
-
-/***/ "./node_modules/redux-thunk/es/index.js":
-/*!**********************************************!*\
-  !*** ./node_modules/redux-thunk/es/index.js ***!
-  \**********************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-function createThunkMiddleware(extraArgument) {
-  return function (_ref) {
-    var dispatch = _ref.dispatch,
-        getState = _ref.getState;
-    return function (next) {
-      return function (action) {
-        if (typeof action === 'function') {
-          return action(dispatch, getState, extraArgument);
-        }
-
-        return next(action);
-      };
-    };
-  };
-}
-
-var thunk = createThunkMiddleware();
-thunk.withExtraArgument = createThunkMiddleware;
-
-/* harmony default export */ __webpack_exports__["default"] = (thunk);
-
-/***/ }),
-
 /***/ "./node_modules/redux/es/redux.js":
 /*!****************************************!*\
   !*** ./node_modules/redux/es/redux.js ***!
@@ -15068,9 +15232,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../actions */ "./actions/index.js");
-/* harmony import */ var _components_Page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Page */ "./components/Page.js");
-/* harmony import */ var _components_Layout__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Layout */ "./components/Layout.js");
-/* harmony import */ var _components_GrowingToday__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/GrowingToday */ "./components/GrowingToday.js");
+/* harmony import */ var _components_Layout__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Layout */ "./components/Layout.js");
+/* harmony import */ var _components_YesterdayGainers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/YesterdayGainers */ "./components/YesterdayGainers.js");
+/* harmony import */ var _components_YesterdayLosers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/YesterdayLosers */ "./components/YesterdayLosers.js");
 var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/pages/index.js";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -15124,28 +15288,64 @@ function (_Component) {
           lineNumber: 15
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_3__["default"], {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 16
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_GrowingToday__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, this.props, {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 17
         },
         __self: this
-      }))));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s9",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 18
+        },
+        __self: this
+      }, "hello"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "col s3",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 19
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayGainers__WEBPACK_IMPORTED_MODULE_4__["default"], _extends({}, this.props, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 20
+        },
+        __self: this
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayLosers__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, this.props, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 21
+        },
+        __self: this
+      }))))));
     }
   }]);
 
   return index;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(_components_Page__WEBPACK_IMPORTED_MODULE_3__["default"])(Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(null, {
-  getStocks: _actions__WEBPACK_IMPORTED_MODULE_2__["getStocks"]
-})(index)));
+var mapStateToProps = function mapStateToProps(state) {
+  return {
+    stocks: state.stocks
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_1__["connect"])(mapStateToProps, {
+  getTopStocks: _actions__WEBPACK_IMPORTED_MODULE_2__["getTopStocks"],
+  getGrowingToday: _actions__WEBPACK_IMPORTED_MODULE_2__["getGrowingToday"],
+  getYesterdayGainers: _actions__WEBPACK_IMPORTED_MODULE_2__["getYesterdayGainers"],
+  getYesterdayLosers: _actions__WEBPACK_IMPORTED_MODULE_2__["getYesterdayLosers"]
+})(index));
     (function (Component, route) {
       if(!Component) return
       if (false) {}
@@ -15168,56 +15368,7 @@ function (_Component) {
 
 /***/ }),
 
-/***/ "./reducer/index.js":
-/*!**************************!*\
-  !*** ./reducer/index.js ***!
-  \**************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-/* harmony import */ var redux_devtools_extension__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-devtools-extension */ "./node_modules/redux-devtools-extension/index.js");
-/* harmony import */ var redux_devtools_extension__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
-/* harmony import */ var _stocksReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./stocksReducer */ "./reducer/stocksReducer.js");
-
-
-
-/**   Reducers  **/
-
-
-var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  stocks: _stocksReducer__WEBPACK_IMPORTED_MODULE_3__["default"]
-});
-var initialState = {};
-/* harmony default export */ __webpack_exports__["default"] = (Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(rootReducer, initialState, Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_1__["composeWithDevTools"])(Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2__["default"]))));
-
-/***/ }),
-
-/***/ "./reducer/stocksReducer.js":
-/*!**********************************!*\
-  !*** ./reducer/stocksReducer.js ***!
-  \**********************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = (function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var action = arguments.length > 1 ? arguments[1] : undefined;
-
-  switch (action.type) {
-    default:
-      return state;
-  }
-});
-
-/***/ }),
-
-/***/ 3:
+/***/ 4:
 /*!******************************!*\
   !*** multi ./pages/index.js ***!
   \******************************/
@@ -15242,5 +15393,5 @@ module.exports = dll_5d62d38be3592dca3a42;
 
 /***/ })
 
-},[[3,"static/runtime/webpack.js","styles"]]]));;
+},[[4,"static/runtime/webpack.js"]]]));;
 //# sourceMappingURL=index.js.map

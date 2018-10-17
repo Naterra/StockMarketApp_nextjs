@@ -12,6 +12,13 @@ const rootReducer = combineReducers({
 
 let initialState={};
 
+export const initializeStore=()=>{
+    return createStore(rootReducer,
+        initialState,
+        composeWithDevTools(
+            applyMiddleware(thunkMiddleware))
+    );
+};
 
 export default createStore(rootReducer,
         initialState,
