@@ -4,12 +4,14 @@
 /*!**************************!*\
   !*** ./actions/index.js ***!
   \**************************/
-/*! exports provided: getTopStocks, getYesterdayGainers, getYesterdayLosers, getMostActives, getGrowingToday */
+/*! exports provided: getTopStocks, getNewYorkTimesNews, getNews, getYesterdayGainers, getYesterdayLosers, getMostActives, getGrowingToday */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTopStocks", function() { return getTopStocks; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNewYorkTimesNews", function() { return getNewYorkTimesNews; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getNews", function() { return getNews; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getYesterdayGainers", function() { return getYesterdayGainers; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getYesterdayLosers", function() { return getYesterdayLosers; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getMostActives", function() { return getMostActives; });
@@ -27,6 +29,57 @@ var getTopStocks = function getTopStocks() {
         type: _types__WEBPACK_IMPORTED_MODULE_1__["FETCH_TOP_STOCKS"],
         payload: res.data
       });
+    }).catch(function (err) {
+      console.log('then', err);
+    });
+  };
+};
+var getNewYorkTimesNews = function getNewYorkTimesNews() {
+  return function (dispatch, getState) {
+    var options = [];
+    options.push("api-key=fdc4eb9230ce428bb2e3ccb28d9f47a5");
+    options.push("sort=newest");
+    options.push("q=stock,APL,AMZN,UFPI, trading"); //NycTimes
+
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.nytimes.com/svc/search/v2/articlesearch.json?" + options.join("&")).then(function (res) {
+      var data = res && res.status == 200 ? res.data.response.docs : [];
+      var newData = data.map(function (i) {
+        console.error('i', i);
+
+        if (i.multimedia.length > 0) {
+          i.img = 'https://www.nytimes.com/' + i.multimedia[0].url;
+        } else {
+          var random = Math.floor(Math.random() * (8 - 0 + 1)) + 0;
+          i.img = '/static/stock_news_img_' + random + '.jpg';
+        }
+
+        return i;
+      }); // console.error('getNews::then', res);
+
+      dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["FETCH_NYT_NEWS"],
+        payload: newData
+      });
+      return data;
+    }).catch(function (err) {
+      console.error('then', err);
+    });
+  };
+};
+var getNews = function getNews() {
+  return function (dispatch, getState) {
+    return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('https://api.iextrading.com/1.0/stock/market/news/last/25').then(function (res) {
+      console.log('res', res.data); //TODO: tmp override image while api not working
+
+      var newData = res.data.map(function (i) {
+        i.img = '';
+        return i;
+      });
+      dispatch({
+        type: _types__WEBPACK_IMPORTED_MODULE_1__["FETCH_NEWS"],
+        payload: newData
+      });
+      return data;
     }).catch(function (err) {
       console.log('then', err);
     });
@@ -98,7 +151,7 @@ var getGrowingToday = function getGrowingToday() {
 /*!**************************!*\
   !*** ./actions/types.js ***!
   \**************************/
-/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, GAINERS_LIST, LOSERS_LIST, MOST_ACTIVE */
+/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, GAINERS_LIST, LOSERS_LIST, MOST_ACTIVE, FETCH_NEWS, FETCH_NYT_NEWS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -109,6 +162,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAINERS_LIST", function() { return GAINERS_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOSERS_LIST", function() { return LOSERS_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MOST_ACTIVE", function() { return MOST_ACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_NEWS", function() { return FETCH_NEWS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_NYT_NEWS", function() { return FETCH_NYT_NEWS; });
 var FETCH_STOCKS = "FETCH_STOCKS";
 var FETCH_TOP_STOCKS = "FETCH_TOP_STOCKS";
 var GROWING_TODAY = "GROWING_TODAY";
@@ -117,6 +172,10 @@ var GROWING_TODAY = "GROWING_TODAY";
 var GAINERS_LIST = "GAINERS_LIST";
 var LOSERS_LIST = "LOSERS_LIST";
 var MOST_ACTIVE = "MOST_ACTIVE";
+/**  News **/
+
+var FETCH_NEWS = "FETCH_NEWS";
+var FETCH_NYT_NEWS = "FETCH_NYT_NEWS";
 
 /***/ }),
 
@@ -457,6 +516,367 @@ function (_Component) {
 
 /***/ }),
 
+/***/ "./components/NYTNewsList.js":
+/*!***********************************!*\
+  !*** ./components/NYTNewsList.js ***!
+  \***********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _StockListRecord__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StockListRecord */ "./components/StockListRecord.js");
+var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/NYTNewsList.js";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+/** Components  **/
+
+
+
+
+var NewsRecord = function NewsRecord(props) {
+  var data = props.data;
+  var imgStyles = {
+    backgroundPosition: "center center",
+    backgroundSize: "cover",
+    backgroundImage: "url(".concat(data.img, ")"),
+    display: "block",
+    width: "100%",
+    height: "135px"
+  };
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "row news-item",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 19
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col s3  ",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 20
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    src: data.img,
+    style: imgStyles,
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 21
+    },
+    __self: this
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "col s9  ",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 23
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: "card-title",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 26
+    },
+    __self: this
+  }, data.headline.main), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "card-content",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 28
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 29
+    },
+    __self: this
+  }, data.snippet), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "blue-text text-darken-2",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 30
+    },
+    __self: this
+  }, data.source))));
+};
+
+var NYTNewsList =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(NYTNewsList, _Component);
+
+  function NYTNewsList(props) {
+    var _this;
+
+    _classCallCheck(this, NYTNewsList);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(NYTNewsList).call(this, props));
+    _this.getTable = _this.getTable.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(NYTNewsList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.getNewYorkTimesNews();
+    }
+  }, {
+    key: "getTable",
+    value: function getTable() {
+      var news = this.props.news;
+      if (!news || !news.nyt_news) return false;
+      var list = news.nyt_news.map(function (item, i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewsRecord, {
+          key: i,
+          data: item,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 50
+          },
+          __self: this
+        });
+      });
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 56
+        },
+        __self: this
+      }, list);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var news = this.props.news;
+      if (!news || !news.nyt_news) return false;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "growing-today",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 67
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        className: "list-title",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 68
+        },
+        __self: this
+      }, "Stocks: Most Actives"), this.getTable());
+    }
+  }]);
+
+  return NYTNewsList;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (NYTNewsList);
+
+/***/ }),
+
+/***/ "./components/NewsList.js":
+/*!********************************!*\
+  !*** ./components/NewsList.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! next/link */ "./node_modules/next/link.js");
+/* harmony import */ var next_link__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(next_link__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _StockListRecord__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./StockListRecord */ "./components/StockListRecord.js");
+var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/components/NewsList.js";
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+
+/** Components  **/
+
+
+
+
+var NewsRecord = function NewsRecord(props) {
+  var data = props.data;
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    class: "row",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 10
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    class: "col s12  ",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 11
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    class: "card-title",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 14
+    },
+    __self: this
+  }, data.headline), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    class: "card-content",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 16
+    },
+    __self: this
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 17
+    },
+    __self: this
+  }, data.summary), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+    className: "blue-text text-darken-2",
+    __source: {
+      fileName: _jsxFileName,
+      lineNumber: 18
+    },
+    __self: this
+  }, data.source)))) // <div className="col s12 ">
+  //
+  // 	<div className="card horizontal">
+  // 		<h2 className="header">{data.headline}</h2>
+  // 		{/*<span class="card-title">Card Title</span>*/}
+  //
+  // 		{/*<div className="card-image">*/}
+  // 			{/*<img src={`${data.image}.png`}/>*/}
+  // 		{/*</div>*/}
+  // 		<div className="card-stacked">
+  // 			<div className="card-content">
+  // 				<p>{data.summary}</p>
+  // 				<p className="blue-text text-darken-2">{data.source}</p>
+  // 			</div>
+  //
+  // 		</div>
+  // 	</div>
+  // </div>
+  ;
+};
+
+var NewsList =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(NewsList, _Component);
+
+  function NewsList(props) {
+    var _this;
+
+    _classCallCheck(this, NewsList);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(NewsList).call(this, props));
+    _this.getTable = _this.getTable.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(NewsList, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.getNews();
+    }
+  }, {
+    key: "getTable",
+    value: function getTable() {
+      var news = this.props.news;
+      if (!news) return false;
+      var list = news.map(function (item, i) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(NewsRecord, {
+          key: i,
+          data: item,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 59
+          },
+          __self: this
+        });
+      });
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 65
+        },
+        __self: this
+      }, list);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var lists = this.props.lists;
+      if (!lists || !lists.most_active) return false;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "growing-today",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 76
+        },
+        __self: this
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+        className: "list-title",
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 77
+        },
+        __self: this
+      }, "Stocks: Most Actives"), this.getTable());
+    }
+  }]);
+
+  return NewsList;
+}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+
+/* harmony default export */ __webpack_exports__["default"] = (NewsList);
+
+/***/ }),
+
 /***/ "./components/StockListRecord.js":
 /*!***************************************!*\
   !*** ./components/StockListRecord.js ***!
@@ -700,42 +1120,42 @@ function (_Component) {
         className: "header row",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 26
+          lineNumber: 28
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 27
+          lineNumber: 29
         },
         __self: this
       }, "Symbol"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 28
+          lineNumber: 30
         },
         __self: this
       }, "Last Price"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 29
+          lineNumber: 31
         },
         __self: this
       }, "Change"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s3",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 30
+          lineNumber: 32
         },
         __self: this
       }, "% Change"));
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 34
+          lineNumber: 36
         },
         __self: this
       }, tableHead, list);
@@ -747,14 +1167,14 @@ function (_Component) {
         className: "growing-today",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 43
+          lineNumber: 45
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
         className: "list-title",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 45
+          lineNumber: 47
         },
         __self: this
       }, "Stocks:Gainers"), this.getTable());
@@ -15494,6 +15914,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_YesterdayGainers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/YesterdayGainers */ "./components/YesterdayGainers.js");
 /* harmony import */ var _components_YesterdayLosers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/YesterdayLosers */ "./components/YesterdayLosers.js");
 /* harmony import */ var _components_MostActives__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../components/MostActives */ "./components/MostActives.js");
+/* harmony import */ var _components_NewsList__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/NewsList */ "./components/NewsList.js");
+/* harmony import */ var _components_NYTNewsList__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../components/NYTNewsList */ "./components/NYTNewsList.js");
 var _jsxFileName = "/Users/nataliiabaikina/PhpstormProjects/Stock_next.js/pages/index.js";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -15528,6 +15950,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
 var index =
 /*#__PURE__*/
 function (_Component) {
@@ -15545,52 +15969,58 @@ function (_Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 16
+          lineNumber: 24
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Layout__WEBPACK_IMPORTED_MODULE_3__["default"], {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 17
+          lineNumber: 25
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 18
+          lineNumber: 26
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s8",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 19
+          lineNumber: 27
         },
         __self: this
-      }, "hello"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_NYTNewsList__WEBPACK_IMPORTED_MODULE_8__["default"], _extends({}, this.props, {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 28
+        },
+        __self: this
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "col s4",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 20
+          lineNumber: 31
         },
         __self: this
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_MostActives__WEBPACK_IMPORTED_MODULE_6__["default"], _extends({}, this.props, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 21
+          lineNumber: 32
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayGainers__WEBPACK_IMPORTED_MODULE_4__["default"], _extends({}, this.props, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 22
+          lineNumber: 33
         },
         __self: this
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_YesterdayLosers__WEBPACK_IMPORTED_MODULE_5__["default"], _extends({}, this.props, {
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 23
+          lineNumber: 34
         },
         __self: this
       }))))));
@@ -15603,7 +16033,8 @@ function (_Component) {
 var mapStateToProps = function mapStateToProps(state) {
   return {
     stocks: state.stocks,
-    lists: state.lists
+    lists: state.lists,
+    news: state.news
   };
 };
 
@@ -15612,7 +16043,9 @@ var mapStateToProps = function mapStateToProps(state) {
   getGrowingToday: _actions__WEBPACK_IMPORTED_MODULE_2__["getGrowingToday"],
   getYesterdayGainers: _actions__WEBPACK_IMPORTED_MODULE_2__["getYesterdayGainers"],
   getYesterdayLosers: _actions__WEBPACK_IMPORTED_MODULE_2__["getYesterdayLosers"],
-  getMostActives: _actions__WEBPACK_IMPORTED_MODULE_2__["getMostActives"]
+  getMostActives: _actions__WEBPACK_IMPORTED_MODULE_2__["getMostActives"],
+  getNews: _actions__WEBPACK_IMPORTED_MODULE_2__["getNews"],
+  getNewYorkTimesNews: _actions__WEBPACK_IMPORTED_MODULE_2__["getNewYorkTimesNews"]
 })(index));
     (function (Component, route) {
       if(!Component) return

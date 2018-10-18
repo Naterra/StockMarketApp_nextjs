@@ -4,7 +4,7 @@
 /*!**************************!*\
   !*** ./actions/types.js ***!
   \**************************/
-/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, GAINERS_LIST, LOSERS_LIST, MOST_ACTIVE */
+/*! exports provided: FETCH_STOCKS, FETCH_TOP_STOCKS, GROWING_TODAY, GAINERS_LIST, LOSERS_LIST, MOST_ACTIVE, FETCH_NEWS, FETCH_NYT_NEWS */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15,6 +15,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GAINERS_LIST", function() { return GAINERS_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOSERS_LIST", function() { return LOSERS_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MOST_ACTIVE", function() { return MOST_ACTIVE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_NEWS", function() { return FETCH_NEWS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FETCH_NYT_NEWS", function() { return FETCH_NYT_NEWS; });
 var FETCH_STOCKS = "FETCH_STOCKS";
 var FETCH_TOP_STOCKS = "FETCH_TOP_STOCKS";
 var GROWING_TODAY = "GROWING_TODAY";
@@ -23,6 +25,10 @@ var GROWING_TODAY = "GROWING_TODAY";
 var GAINERS_LIST = "GAINERS_LIST";
 var LOSERS_LIST = "LOSERS_LIST";
 var MOST_ACTIVE = "MOST_ACTIVE";
+/**  News **/
+
+var FETCH_NEWS = "FETCH_NEWS";
+var FETCH_NYT_NEWS = "FETCH_NYT_NEWS";
 
 /***/ }),
 
@@ -11681,6 +11687,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux_thunk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! redux-thunk */ "./node_modules/redux-thunk/es/index.js");
 /* harmony import */ var _stocksReducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./stocksReducer */ "./reducer/stocksReducer.js");
 /* harmony import */ var _listsReducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./listsReducer */ "./reducer/listsReducer.js");
+/* harmony import */ var _newsReducer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./newsReducer */ "./reducer/newsReducer.js");
 
 
 
@@ -11688,9 +11695,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   stocks: _stocksReducer__WEBPACK_IMPORTED_MODULE_3__["default"],
-  lists: _listsReducer__WEBPACK_IMPORTED_MODULE_4__["default"]
+  lists: _listsReducer__WEBPACK_IMPORTED_MODULE_4__["default"],
+  news: _newsReducer__WEBPACK_IMPORTED_MODULE_5__["default"]
 });
 var initialState = {};
 var initializeStore = function initializeStore() {
@@ -11733,6 +11742,43 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     case _actions_types__WEBPACK_IMPORTED_MODULE_0__["MOST_ACTIVE"]:
       return _objectSpread({}, state, {
         most_active: action.payload
+      });
+
+    default:
+      return state;
+  }
+});
+
+/***/ }),
+
+/***/ "./reducer/newsReducer.js":
+/*!********************************!*\
+  !*** ./reducer/newsReducer.js ***!
+  \********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_types__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/types */ "./actions/types.js");
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_NYT_NEWS"]:
+      return _objectSpread({}, state, {
+        nyt_news: action.payload
+      });
+
+    case _actions_types__WEBPACK_IMPORTED_MODULE_0__["FETCH_NEWS"]:
+      return _objectSpread({}, state, {
+        news: action.payload
       });
 
     default:

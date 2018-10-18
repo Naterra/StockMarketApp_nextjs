@@ -2,13 +2,21 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
 /**  Actions  **/
-import { getTopStocks, getGrowingToday, getYesterdayGainers, getYesterdayLosers, getMostActives } from '../actions';
+import { getTopStocks,
+	getGrowingToday,
+	getYesterdayGainers,
+	getYesterdayLosers,
+	getMostActives,
+	getNews,
+	getNewYorkTimesNews } from '../actions';
 
 /**  Components  **/
 import Layout from '../components/Layout';
 import YesterdayGainers from '../components/YesterdayGainers';
 import YesterdayLosers from '../components/YesterdayLosers';
 import MostActives from '../components/MostActives';
+import NewsList from '../components/NewsList';
+import NYTNewsList from '../components/NYTNewsList';
 
 class index extends Component {
 	render() {
@@ -16,7 +24,10 @@ class index extends Component {
 			<Fragment>
 				<Layout>
 					<div className="row">
-						<div className="col s8">hello</div>
+						<div className="col s8">
+							<NYTNewsList {...this.props}/>
+							{/*<NewsList {...this.props}/>*/}
+						</div>
 						<div className="col s4">
 							<MostActives {...this.props} />
 							<YesterdayGainers {...this.props} />
@@ -31,8 +42,9 @@ class index extends Component {
 const mapStateToProps = state => {
 	return {
 		stocks: state.stocks,
-        lists: state.lists
+        lists: state.lists,
+        news: state.news
 	};
 };
 
-export default connect(mapStateToProps, { getTopStocks, getGrowingToday, getYesterdayGainers, getYesterdayLosers, getMostActives })(index);
+export default connect(mapStateToProps, { getTopStocks, getGrowingToday, getYesterdayGainers, getYesterdayLosers, getMostActives, getNews, getNewYorkTimesNews })(index);

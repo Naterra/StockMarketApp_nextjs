@@ -1,9 +1,11 @@
-# build
+# Build Output
 dist
+.next
+.vscode
+.DS_Store
+*.log
+*.tmp
 
 # dependencies
 node_modules/
-.next/
-*.log
-.DS_Store
-*.tmp
+package-lock.json

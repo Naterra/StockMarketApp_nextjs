@@ -6,3 +6,7 @@ export const GROWING_TODAY = "GROWING_TODAY";
 export const GAINERS_LIST = "GAINERS_LIST";
 export const LOSERS_LIST = "LOSERS_LIST";
 export const MOST_ACTIVE = "MOST_ACTIVE";
+
+/**  News **/
+export const FETCH_NEWS = "FETCH_NEWS";
+export const FETCH_NYT_NEWS = "FETCH_NYT_NEWS";

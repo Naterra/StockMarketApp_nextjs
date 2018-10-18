@@ -5,11 +5,13 @@ import thunkMiddleware from 'redux-thunk';
 /**   Reducers  **/
 import stocksReducer from './stocksReducer';
 import listsReducer from './listsReducer';
+import newsReducer from './newsReducer';
 
 
 const rootReducer = combineReducers({
     stocks: stocksReducer,
-    lists: listsReducer
+    lists: listsReducer,
+    news: newsReducer
 });
 
 let initialState={};

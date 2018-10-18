@@ -23,6 +23,8 @@ class GrowingToday extends Component {
             return <StockListRecord key={i} stock={stock}/>
 		});
 
+
+
 		const tableHead = (<div className="header row">
 			<div className="col s3">Symbol</div>
 			<div className="col s3">Last Price</div>
